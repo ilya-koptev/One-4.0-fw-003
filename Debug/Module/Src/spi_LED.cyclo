@@ -1,0 +1,7 @@
+../Module/Src/spi_LED.c:36:6:Spi_LED_IncTick	6
+../Module/Src/spi_LED.c:61:6:Spi_LED_Init	3
+../Module/Src/spi_LED.c:89:6:HAL_SPI_TxCpltCallback	3
+../Module/Src/spi_LED.c:103:6:Spi_LED_Set_Full_Color	3
+../Module/Src/spi_LED.c:116:6:Spi_LED_Set_Custom_Color	3
+../Module/Src/spi_LED.c:129:6:Spi_LED_Set_Color	1
+../Module/Src/spi_LED.c:137:6:Spi_LED_Set_Fix_Color	21

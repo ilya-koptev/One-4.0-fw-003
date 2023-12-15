@@ -1,0 +1,7 @@
+../Module/Src/spi_LED.c:36:6:Spi_LED_IncTick	8	static
+../Module/Src/spi_LED.c:61:6:Spi_LED_Init	16	static
+../Module/Src/spi_LED.c:89:6:HAL_SPI_TxCpltCallback	16	static
+../Module/Src/spi_LED.c:103:6:Spi_LED_Set_Full_Color	16	static
+../Module/Src/spi_LED.c:116:6:Spi_LED_Set_Custom_Color	16	static
+../Module/Src/spi_LED.c:129:6:Spi_LED_Set_Color	16	static
+../Module/Src/spi_LED.c:137:6:Spi_LED_Set_Fix_Color	24	static

@@ -1,0 +1,6 @@
+../Module/Src/module.c:24:6:MM_Init	8	static
+../Module/Src/module.c:36:6:HAL_IncTick	8	static
+../Module/Src/module.c:48:6:MM_Tx_Answer	16	static
+../Module/Src/module.c:62:6:MM_Tx_Event	16	static
+../Module/Src/module.c:78:6:CDCDataReceivedCallback	16	static
+../Module/Src/module.c:94:10:MM_CRC_Calculate	40	static,ignoring_inline_asm

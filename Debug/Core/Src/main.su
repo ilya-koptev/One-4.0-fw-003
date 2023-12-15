@@ -1,0 +1,6 @@
+../Core/Src/main.c:95:5:main	8	static
+../Core/Src/main.c:170:6:SystemClock_Config	96	static
+../Core/Src/main.c:217:6:HAL_UART_RxCpltCallback	72	static
+../Core/Src/main.c:322:6:Main_IncTic	4	static
+../Core/Src/main.c:378:6:Buttons_Handler	32	static
+../Core/Src/main.c:486:6:Error_Handler	4	static

@@ -1,0 +1,4 @@
+../Module/Src/buttons.c:24:6:Button_IncTick	17
+../Module/Src/buttons.c:86:6:Event_Button	1
+../Module/Src/buttons.c:100:13:Buttons_Handler	1
+../Module/Src/buttons.c:107:6:Buttons_Init	1

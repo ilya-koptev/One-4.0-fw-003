@@ -1,0 +1,6 @@
+../Module/Src/module.c:24:6:MM_Init	1
+../Module/Src/module.c:36:6:HAL_IncTick	2
+../Module/Src/module.c:48:6:MM_Tx_Answer	1
+../Module/Src/module.c:62:6:MM_Tx_Event	1
+../Module/Src/module.c:78:6:CDCDataReceivedCallback	1
+../Module/Src/module.c:94:10:MM_CRC_Calculate	2
