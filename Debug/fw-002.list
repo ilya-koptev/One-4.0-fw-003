@@ -41,11 +41,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  18 .debug_line   0002f26e  00000000  00000000  00075dd7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000cd66e  00000000  00000000  000a5045  2**0
+ 19 .debug_str    000cd696  00000000  00000000  000a5045  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_frame  00008970  00000000  00000000  001726b4  2**2
+ 20 .debug_frame  00008970  00000000  00000000  001726dc  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 0000005d  00000000  00000000  0017b024  2**0
+ 21 .debug_line_str 0000005d  00000000  00000000  0017b04c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1041,17 +1041,17 @@ int main(void)
  80008c8:	4b09      	ldr	r3, [pc, #36]	; (80008f0 <main+0x88>)
  80008ca:	2200      	movs	r2, #0
  80008cc:	701a      	strb	r2, [r3, #0]
-	  HAL_Delay(200);
- 80008ce:	20c8      	movs	r0, #200	; 0xc8
- 80008d0:	f001 fa60 	bl	8001d94 <HAL_Delay>
+	  HAL_Delay(900);
+ 80008ce:	f44f 7061 	mov.w	r0, #900	; 0x384
+ 80008d2:	f001 fa5f 	bl	8001d94 <HAL_Delay>
 //	  Debug_LED1 = BLACK;
 
 	  Debug_LED2 = GREEN;
- 80008d4:	4b06      	ldr	r3, [pc, #24]	; (80008f0 <main+0x88>)
- 80008d6:	2203      	movs	r2, #3
- 80008d8:	701a      	strb	r2, [r3, #0]
-	  HAL_Delay(800);
- 80008da:	f44f 7048 	mov.w	r0, #800	; 0x320
+ 80008d6:	4b06      	ldr	r3, [pc, #24]	; (80008f0 <main+0x88>)
+ 80008d8:	2203      	movs	r2, #3
+ 80008da:	701a      	strb	r2, [r3, #0]
+	  HAL_Delay(100);
+ 80008dc:	2064      	movs	r0, #100	; 0x64
  80008de:	f001 fa59 	bl	8001d94 <HAL_Delay>
 	  Debug_LED2 = BLACK;
  80008e2:	e7f1      	b.n	80008c8 <main+0x60>

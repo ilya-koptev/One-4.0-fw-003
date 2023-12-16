@@ -76,8 +76,8 @@ all: main-build
 main-build: fw-002.elf secondary-outputs
 
 # Tool invocations
-fw-002.elf fw-002.map: $(OBJS) $(USER_OBJS) D:\One\ 4_0\ beta\i-WorkSpase\fw-002-test\fw-002\STM32F215RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "fw-002.elf" @"objects.list" $(USER_OBJS) -Wl,--start-group $(LIBS) -Wl,--end-group -mcpu=cortex-m3 -T"D:\One 4_0 beta\i-WorkSpase\fw-002-test\fw-002\STM32F215RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="fw-002.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+fw-002.elf fw-002.map: $(OBJS) $(USER_OBJS) D:\Git\Parametrica\One-4.0\fw-003\STM32F215RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "fw-002.elf" @"objects.list" $(USER_OBJS) -Wl,--start-group $(LIBS) -Wl,--end-group -mcpu=cortex-m3 -T"D:\Git\Parametrica\One-4.0\fw-003\STM32F215RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="fw-002.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
