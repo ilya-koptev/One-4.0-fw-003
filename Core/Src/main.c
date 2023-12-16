@@ -151,11 +151,11 @@ int main(void)
 
 //	  Debug_LED1 = 	RED;
 	  Debug_LED2 = BLACK;
-	  HAL_Delay(800);
+	  HAL_Delay(500);
 //	  Debug_LED1 = BLACK;
 
 	  Debug_LED2 = GREEN;
-	  HAL_Delay(200);
+	  HAL_Delay(500);
 //	  CDC_Transmit_FS(rx_data, 10);
 //	  HAL_UART_Transmit(&huart2, rx_data, 7, 10);
 
