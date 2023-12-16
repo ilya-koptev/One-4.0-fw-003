@@ -1041,8 +1041,8 @@ int main(void)
  80008c8:	4b09      	ldr	r3, [pc, #36]	; (80008f0 <main+0x88>)
  80008ca:	2200      	movs	r2, #0
  80008cc:	701a      	strb	r2, [r3, #0]
-	  HAL_Delay(900);
- 80008ce:	f44f 7061 	mov.w	r0, #900	; 0x384
+	  HAL_Delay(800);
+ 80008ce:	f44f 7048 	mov.w	r0, #800	; 0x320
  80008d2:	f001 fa5f 	bl	8001d94 <HAL_Delay>
 //	  Debug_LED1 = BLACK;
 
@@ -1050,8 +1050,8 @@ int main(void)
  80008d6:	4b06      	ldr	r3, [pc, #24]	; (80008f0 <main+0x88>)
  80008d8:	2203      	movs	r2, #3
  80008da:	701a      	strb	r2, [r3, #0]
-	  HAL_Delay(100);
- 80008dc:	2064      	movs	r0, #100	; 0x64
+	  HAL_Delay(200);
+ 80008dc:	20c8      	movs	r0, #200	; 0xc8
  80008de:	f001 fa59 	bl	8001d94 <HAL_Delay>
 	  Debug_LED2 = BLACK;
  80008e2:	e7f1      	b.n	80008c8 <main+0x60>
