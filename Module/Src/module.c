@@ -28,7 +28,7 @@ void MM_Init(void){
 	Debug_LED_Init();
 	Out_Init();
 
-	HAL_UART_Transmit(&huart2, (uint8_t *)"\r\n\033[36mParametrica.ru\033[0m\r\n", 27, 5);
+//	HAL_UART_Transmit(&huart2, (uint8_t *)"\r\n\033[36mParametrica.ru\033[0m\r\n", 27, 5);
 //	init_OK = 1;
 }
 

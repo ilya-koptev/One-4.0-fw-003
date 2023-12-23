@@ -1,3 +1,4 @@
 ../Module/Src/debug_LED.c:8:6:Debug_LED_IncTic	11
-../Module/Src/debug_LED.c:42:6:Debug_LED_Init	1
-../Module/Src/debug_LED.c:50:6:Debug_UART	4
+../Module/Src/debug_LED.c:41:6:Debug_LED_toggle	5
+../Module/Src/debug_LED.c:67:6:Debug_LED_Init	1
+../Module/Src/debug_LED.c:75:6:Debug_UART	4

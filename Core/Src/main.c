@@ -51,6 +51,9 @@
 #define AT 0
 #define JOYSTIC 1
 #define TEST 2
+
+#define LORA
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -67,7 +70,7 @@
 		extern uint8_t init_OK;
 
 
-		uint8_t rx_data[64] = "egor \r\n";
+		uint8_t rx_data[64] = "e \r\n";
 
 		uint8_t Regim = AT;
 		uint16_t Velosity = 0;
@@ -134,10 +137,23 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   	MM_Init();
-
 	HAL_UART_Receive_IT(&huart2, rx_data, 1);
 
+#ifdef LORA
+	HAL_SPI_DeInit(&hspi3);
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	  GPIO_InitStruct.Pull = GPIO_NOPULL;
+	  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+	#define LORA_SET HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+	#define LORA_RESET HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
+	LORA_RESET
+
+
+#endif
   	init_OK = 1;
+  	Debug_LED2 = YELLOW;
 
   /* USER CODE END 2 */
 
@@ -215,103 +231,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-	static uint8_t index = 0;
-	Debug_LED2 = GREEN;
 
-	if ((rx_data[index] != 0x0d) && (index < 64)){
-		HAL_UART_Transmit(&huart2, rx_data + index++, 1, 10);
-		if (Regim == JOYSTIC){
-			if (rx_data[0] == 0x38){ // Быстрее
-				Velosity += 50; if (Velosity > 1000) {Velosity = 1000;}
-				Set_Out(P_OUT_1, Velosity);
-				Debug_UART((uint8_t *) "Set velosity ", DBG_OK, 13);
-				uint8_t range[10] = "          ";
-				utoa(Velosity,range,10);
-				HAL_UART_Transmit(&huart2, range, 4, 10);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			}
-			if (rx_data[0] == 0x32){ // Медленнее
-				if (Velosity < 50) {Velosity = 0;} else {Velosity -= 50;}
-				Set_Out(P_OUT_1, Velosity);
-				Debug_UART((uint8_t *) "Set velosity ", DBG_OK, 13);
-				uint8_t range[10] = "          ";
-				utoa(Velosity,range,10);
-				HAL_UART_Transmit(&huart2, range, 4, 10);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			}
-			if (rx_data[0] == 0x35){ // Стоп
-				Velosity = 0;
-				Set_Out(P_OUT_1, Velosity);
-				Debug_UART((uint8_t *) "Set STOP ", DBG_OK, 9);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			}
-			if (rx_data[0] == 0x34){ // Вправо
-				Rudder -= 10; if (Rudder <= -50) {Rudder = -50;}
-				Set_Out(P_OUT_7, 930 + Rudder);
-				Debug_UART((uint8_t *) "Left ", DBG_OK, 5);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			}
-			if (rx_data[0] == 0x36){ // Вправо
-				Rudder += 10; if (Rudder >= 50) {Rudder = 50;}
-				Set_Out(P_OUT_7, 930 + Rudder);
-				Debug_UART((uint8_t *) "Right ", DBG_OK, 6);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			}
-
-
-			index = 0;
-		}
-		HAL_UART_Receive_IT(&huart2, rx_data + index, 1);
-	}
-	else {
-		if (Regim == JOYSTIC) {
-			Regim = AT;
-			HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			Debug_UART((uint8_t *) "Set AT command ", DBG_OK, 15);
-			HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-		}
-		HAL_UART_Transmit(&huart2, (uint8_t *)" \r\n", 3, 10);
-		HAL_UART_Receive_IT(&huart2, rx_data, 1);
-		if ((rx_data[0] == 0x41) && (rx_data[1] == 0x54) && (rx_data[2] == 0x2b)){								// AT+
-			if (rx_data[3] == 0x52) {Debug_LED1 = RED; Debug_UART((uint8_t *) "RED ON \r\n", DBG_OK, 9);}		//R
-			if (rx_data[3] == 0x47) {Debug_LED1 = GREEN;Debug_UART((uint8_t *) "GREEN ON \r\n", DBG_OK, 11);}	//G
-			if (rx_data[3] == 0x42) {Debug_LED1 = BLACK;Debug_UART((uint8_t *) "LED OFF \r\n", DBG_OK, 10);}	//B
-			if (rx_data[3] == 0x59) {Debug_LED1 = YELLOW;Debug_UART((uint8_t *) "YELLOW ON \r\n", DBG_OK, 12);}	//Y
-			if (rx_data[3] == 0x50) {																			//P
-				Set_Out(rx_data[4] - 0x31, atoi(&rx_data[6]));
-				Debug_UART((uint8_t *) "Set bright ", DBG_OK, 11);
-				uint8_t range[10] = "          ";
-				utoa(atoi(&rx_data[6]),range,10);
-				HAL_UART_Transmit(&huart2, range, 4, 10);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			}
-			if (rx_data[3] == 0x46) {																			//F
-				Set_PWM_Freq(rx_data[4] - 0x31 + 14, atoi(&rx_data[6]));
-				Debug_UART((uint8_t *) "Set freq ", DBG_OK, 9);
-				uint8_t range[10] = "          ";
-				utoa(atoi(&rx_data[6]),range,10);
-				HAL_UART_Transmit(&huart2, range, 4, 10);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-			}
-			if (rx_data[3] == 0x4a) {
-				Regim = JOYSTIC;
-				Set_PWM_Freq(P_OUT_1234, 1000);
-				Set_PWM_Freq(P_OUT_567, 50);
-				Set_Out(P_OUT_1, 0);
-				Set_Out(P_OUT_7, 930);
-				Debug_UART((uint8_t *) "Set JOYSTIC ", DBG_OK, 12);
-				HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
-
-			}
-		}
-		index = 0;
-	}
-
-
-
-	//			uint8_t range[10] = " = 0x          ";
-	//			utoa(rx_data[0], range + 5, 16);
-	//			HAL_UART_Transmit(&huart2, range, 8, 10);
 	//			HAL_UART_Transmit(&huart2,(uint8_t *)" \r\n", 3, 10);
 
 
@@ -320,154 +240,23 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
 
 void Main_IncTic(void){
-//	static uint16_t girlyanda_timer = 10;
-//	static uint8_t current_LED;
-//	static uint8_t current_color = 1;
-//	if (girlyanda_timer){girlyanda_timer--;}
-//	else{
-//		girlyanda_timer = 10;
-//
-//		Spi_LED_Set_Fix_Color(current_LED, rand()%10, current_color);
-//		current_LED = rand()%149;
-//		Spi_LED_Set_Fix_Color(current_LED, rand()%250, current_color);
-//		current_color++;
-//		if (current_color > WHITE){current_color = 1;}
-//
-//	}
-//	static uint8_t zvezda[5][10] = {{4, 5,13,14,22,23,31,32,40,41},
-//									{3, 6,12,15,21,24,30,33,39,42},
-//									{2, 7,11,16,20,25,29,34,38,43},
-//									{1, 8,10,17,19,26,28,35,37,44},
-//								   {45, 9, 9,18,18,27,27,36,36,45}};
-//	static uint16_t zvezda_timer = 100;
-//	if (zvezda_timer) {zvezda_timer--;}
-//	else{
-//		zvezda_timer = 100;
-//		static uint8_t current_bright[10] = {10,20,50,100,200,10,20,50,100,200};
-//		static uint8_t shift = 9;
-//		for (uint8_t j = 0; j < 5; j++){
-//			for (uint8_t i = 0; i < 10; i++){Spi_LED_Set_Fix_Color(zvezda[j][i] + 149, current_bright[shift], RED);}
-//			if (--shift){} else {shift = 9;}
-//		}
-//
-//
-//	}
 
-//static uint16_t shift_timer = 300;
-//	if (Regim == TEST){
-//		if (shift_timer) {shift_timer--;}
-//		else {
-//			shift_timer == 1000;
-//
-//
-//			static uint8_t shift = 0;
-//			for (uint16_t i = shift; i < ((LED_MAX<<1) - 4); i += 4){
-//				Spi_LED_Set_Fix_Color(i, 50, WHITE);
-//				Spi_LED_Set_Fix_Color(i + 1, 0, BLACK);
-//				Spi_LED_Set_Fix_Color(i + 2, 0, BLACK);
-//				Spi_LED_Set_Fix_Color(i + 3, 0, BLACK);
-//			}
-//			shift++;
-//			if (shift == 3) {shift = 0;}
-//
-//
-//		}
-//	}
 }
 
 void Buttons_Handler (uint8_t Butt, Button_events_TypeDef Event){
-//	if ((Butt == 0) && (Event == SHORT_CLC)) {
-//
-//		Debug_LED1 = GREEN;
-//		uint32_t temp;
-//		CRC->CR = 1;
-//		CRC->DR = 0x11111111;
-//		temp = CRC->DR;
-//		CRC->DR = temp;
-//		temp = CRC->DR;
-//
-//
-//
-////
-////
-//////		static uint8_t for_crc[16] = {0x00, 0x00, 0x00, 0x0f, 0x01, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x01, 0x01, 0x00, 0x01 };
-////		static uint32_t for_crc[4];
-////		static uint32_t out_crc[16];
-////
-//////		out_crc[0] = HAL_CRC_Calculate(&hcrc, (uint32_t*)for_crc, 4);
-//////		out_crc[1] = HAL_CRC_Calculate(&hcrc, (uint32_t*)for_crc, 3);
-////
-////		for_crc[0] = 0x11223344;
-////		for_crc[1] = __RBIT(for_crc[0]);
-////		for_crc[2] = __REV(for_crc[0]);
-////		for_crc[3] = __RBIT(for_crc[2]);
-////
-//////		CDC_Transmit_FS((uint8_t*)for_crc, 16);
-////
-////		CRC->CR = 1;
-////		CRC->DR = for_crc[0];
-////		out_crc[0] = CRC->DR;
-////
-////		CRC->CR = 1;
-////		CRC->DR = for_crc[1];
-////		out_crc[1] = CRC->DR;
-////
-////		CRC->CR = 1;
-////		CRC->DR = for_crc[2];
-////		out_crc[2] = CRC->DR;
-////
-////		CRC->CR = 1;
-////		CRC->DR = for_crc[3];
-////		out_crc[3] = CRC->DR;
-////
-////
-//////		CDC_Transmit_FS((uint8_t*)out_crc, 16);
-////
-////		out_crc[4] = __RBIT(out_crc[0]);
-////		out_crc[5] = __RBIT(out_crc[1]);
-////		out_crc[6] = __RBIT(out_crc[2]);
-////		out_crc[7] = __RBIT(out_crc[3]);
-////
-////		out_crc[8] = out_crc[4] ^ 0XFFFFFFFF;
-////		out_crc[9] = out_crc[5] ^ 0XFFFFFFFF;
-////		out_crc[10] = out_crc[6] ^ 0XFFFFFFFF;
-////		out_crc[11] = out_crc[7] ^ 0XFFFFFFFF;
-////
-////
-////
-////
-////
-////		CDC_Transmit_FS((uint8_t*)out_crc, 48);
-//
-//	}
-//
-//	if ((Butt == 1) && (Event == SHORT_CLC)) {
-//
-//
-//	}
-//
-//
-//
-//
-	static uint8_t shift = 0;
+
+
 	if ((Butt == 0) && (Event == SHORT_CLC)) {
-		Regim = AT;
-		shift++;
-		for (uint16_t i = 0; i < (LED_MAX << 1); i++) {Spi_LED_Set_Fix_Color(i, 10, GREEN);}
-		for (uint16_t i = shift; i <(LED_MAX << 1); i += 10) {Spi_LED_Set_Fix_Color(i, 10, RED);}
-		for (uint16_t i = shift; i <(LED_MAX << 1); i += 100) {Spi_LED_Set_Fix_Color(i, 10, BLUE);}
-		if (shift > 9) {shift = 0;}
+		Debug_LED_toggle(2);
+		if (Debug_LED2) {LORA_SET}
+		else {LORA_RESET}
 	}
 	if ((Butt == 0) && (Event == DOUBLE_CLC)) {
-		Regim = AT;
-		shift = 0;
-		for (uint16_t i = 0; i < (LED_MAX << 1); i++) {Spi_LED_Set_Fix_Color(i, 10, GREEN);}
-		for (uint16_t i = shift; i <(LED_MAX << 1); i += 10) {Spi_LED_Set_Fix_Color(i, 10, RED);}
-		for (uint16_t i = shift; i <(LED_MAX << 1); i += 100) {Spi_LED_Set_Fix_Color(i, 10, BLUE);}
-
+		uint8_t send_data[10] = {0x00, 0x64, 0xfe, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa};
+		HAL_UART_Transmit(&huart2,send_data, 10, 10);
 	}
 	if ((Butt == 0) && (Event == LONG_CLC)) {
-		Regim = TEST;
+
 	}
 
 }

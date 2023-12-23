@@ -87,10 +87,10 @@ void Event_Button (uint8_t Butt, Button_events_TypeDef Event){
 
 
 	Buttons_Handler(Butt, Event);
-	uint8_t Send_msg[25] = "Button [x] type [x]\r\n";
-	Send_msg[8] = Butt + 0x30;
-	Send_msg[17] = Event + 0x30;
-	Debug_UART( Send_msg, DBG_BTN,  21);
+//	uint8_t Send_msg[25] = "Button [x] type [x]\r\n";
+//	Send_msg[8] = Butt + 0x30;
+//	Send_msg[17] = Event + 0x30;
+//	Debug_UART( Send_msg, DBG_BTN,  21);
 
 	Button[Butt].Event = NONE;
 	Button[Butt].Timer = 0;

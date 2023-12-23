@@ -38,6 +38,31 @@ void Debug_LED_IncTic(void){
 	}
 
 }
+void Debug_LED_toggle(uint8_t led){
+	if (led == 1){
+		static LED_ColorTypeDef old_Debug_LED1;
+		if (Debug_LED1) {
+			old_Debug_LED1 = Debug_LED1;
+			Debug_LED1 = BLACK;
+		}
+		else {
+			Debug_LED1 = old_Debug_LED1;
+		}
+	}
+	if (led == 2){
+		static LED_ColorTypeDef old_Debug_LED2;
+		if (Debug_LED2) {
+			old_Debug_LED2 = Debug_LED2;
+			Debug_LED2 = BLACK;
+		}
+		else {
+			Debug_LED2 = old_Debug_LED2;
+		}
+	}
+
+}
+
+
 
 void Debug_LED_Init (void){
 

@@ -1,4 +1,4 @@
 ../Module/Src/buttons.c:24:6:Button_IncTick	16	static
-../Module/Src/buttons.c:86:6:Event_Button	56	static
+../Module/Src/buttons.c:86:6:Event_Button	16	static
 ../Module/Src/buttons.c:100:13:Buttons_Handler	16	static
 ../Module/Src/buttons.c:107:6:Buttons_Init	8	static

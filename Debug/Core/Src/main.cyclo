@@ -1,6 +1,6 @@
-../Core/Src/main.c:95:5:main	1
-../Core/Src/main.c:170:6:SystemClock_Config	4
-../Core/Src/main.c:217:6:HAL_UART_RxCpltCallback	24
-../Core/Src/main.c:322:6:Main_IncTic	1
-../Core/Src/main.c:378:6:Buttons_Handler	14
-../Core/Src/main.c:486:6:Error_Handler	1
+../Core/Src/main.c:98:5:main	1
+../Core/Src/main.c:186:6:SystemClock_Config	4
+../Core/Src/main.c:233:6:HAL_UART_RxCpltCallback	1
+../Core/Src/main.c:242:6:Main_IncTic	1
+../Core/Src/main.c:246:6:Buttons_Handler	6
+../Core/Src/main.c:275:6:Error_Handler	1

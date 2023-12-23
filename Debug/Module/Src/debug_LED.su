@@ -1,3 +1,4 @@
 ../Module/Src/debug_LED.c:8:6:Debug_LED_IncTic	8	static
-../Module/Src/debug_LED.c:42:6:Debug_LED_Init	4	static
-../Module/Src/debug_LED.c:50:6:Debug_UART	16	static
+../Module/Src/debug_LED.c:41:6:Debug_LED_toggle	16	static
+../Module/Src/debug_LED.c:67:6:Debug_LED_Init	4	static
+../Module/Src/debug_LED.c:75:6:Debug_UART	16	static

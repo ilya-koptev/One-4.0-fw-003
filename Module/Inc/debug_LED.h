@@ -11,4 +11,5 @@ typedef enum {
 
 void Debug_LED_Init (void);
 void Debug_LED_IncTic(void);
+void Debug_LED_toggle(uint8_t led);
 void Debug_UART (uint8_t* msg, Dbg_msg_TypeDef dbg_msg, uint8_t len);
