@@ -7,9 +7,9 @@ LED_ColorTypeDef Debug_LED2;
 
 void Debug_LED_IncTic(void){
 
-	static uint8_t switch_timer = 11;
+	static uint8_t switch_timer = 22;
 	switch_timer--;
-	if (switch_timer == 5) {
+	if (switch_timer == 11) {
 		switch (Debug_LED1) {
 			case GREEN: 	{	GPIOC->MODER &= ~(GPIO_MODER_MODE13);
 								GPIOC->MODER |= GPIO_MODER_MODE4_0; 	HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET); break;}
@@ -34,7 +34,7 @@ void Debug_LED_IncTic(void){
 								GPIOC->MODER &= ~(GPIO_MODER_MODE4); break;}
 			default:		{break;}
 		}
-		switch_timer = 11;
+		switch_timer = 22;
 	}
 
 }
