@@ -108,9 +108,9 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 uint16_t MRTU_CRC(uint8_t *data, uint8_t len);
-void MRTU_Read(uint16_t reg, uint8_t func);
-
-
+void MRTU_Read(uint16_t reg);
+void MRTU_Write(uint16_t reg, uint16_t value);
+void MRTU_Error(uint8_t code, uint8_t func);
 
 
 /* USER CODE END PFP */
@@ -315,47 +315,24 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 		uint16_t tmp = MRTU_CRC(reseive_msg, 6);
 		uint8_t CRC1 = (uint8_t)tmp;
 		uint8_t CRC2 = (uint8_t)(tmp >> 8);
-		if (	   (reseive_msg[2] == 0) && (reseive_msg[3] < 32) \
-				&& (reseive_msg[4] == 0) && (reseive_msg[5] == 1) \
-				&& (reseive_msg[6] == CRC1) && (reseive_msg[7] == CRC2)){	//сумму сверяем
-			if (reseive_msg[1] == 3){										//чтение
-				MRTU_Read(reseive_msg[3], 3);
-
+		if (reseive_msg[1] == 3){
+			if (	   (reseive_msg[2] == 0) && (reseive_msg[3] < 32) \
+					&& (reseive_msg[4] == 0) && (reseive_msg[5] == 1) \
+					&& (reseive_msg[6] == CRC1) && (reseive_msg[7] == CRC2)){
+				MRTU_Read(reseive_msg[3]);
 			}
-			else if (reseive_msg[1] == 6){									//запись
-
-
-			}
+			else {MRTU_Error(3, reseive_msg[1]);}
 		}
+		else if (reseive_msg[1] == 6){
+			if (	   (reseive_msg[2] == 0) && (reseive_msg[3] < 32) \
+					&& (reseive_msg[6] == CRC1) && (reseive_msg[7] == CRC2)){
+
+				MRTU_Write(reseive_msg[3], (((uint16_t)reseive_msg[4]) | (uint16_t)(reseive_msg[5] << 8)));
+			}
+			else {MRTU_Error(3, reseive_msg[1]);}
+		}
+		else {MRTU_Error(1, reseive_msg[1]);}
 	}
-
-
-
-
-
-
-//	if (preambula){
-//
-//		CDC_Transmit_FS(rx_data, lenght);
-//		HAL_UART_Receive_IT(&huart2, rx_data, 4);
-//		preambula = 0;
-//	}
-//	else{
-//		if ((rx_data[0] == 00) && (rx_data[1] == mine_address) && (rx_data[2] == lora_channel)){
-//			lenght = rx_data[3];
-//			preambula = 1;
-//			HAL_UART_Receive_IT(&huart2, rx_data, lenght);
-//
-//		}
-//		else {
-//			preambula = 0;
-//			HAL_UART_Receive_IT(&huart2, rx_data, 4);
-//			Debug_LED1 = RED;
-//		}
-//	}
-
-
-
 }
 
 
@@ -371,8 +348,7 @@ void Buttons_Handler (uint8_t Butt, Button_events_TypeDef Event){
 
 	}
 	if ((Butt == 0) && (Event == DOUBLE_CLC)) {
-		uint8_t send_data[10] = {0x00, 0x64, 0x0f, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa};
-		HAL_UART_Transmit(&huart2,send_data, 10, 100);
+
 	}
 	if ((Butt == 0) && (Event == LONG_CLC)) {
 
@@ -390,14 +366,14 @@ uint16_t MRTU_CRC(uint8_t *data, uint8_t len){
     }
     return (((uint16_t)(uchCRCLo) << 8) | (uint16_t)(uchCRCHi));
 }
-void MRTU_Read(uint16_t reg, uint8_t func){
+void MRTU_Read(uint16_t reg){
 	static uint8_t transmit_msg[16] = {0};
 
 	transmit_msg[0] = (uint8_t)(ModbusReg[7] >> 8);		//
 	transmit_msg[1] = (uint8_t)ModbusReg[7];			//адрес LorA хост
 	transmit_msg[2] = (uint8_t)ModbusReg[8];			//канал LoRa
 	transmit_msg[3] = (uint8_t)ModbusReg[0];			//MRTU адрес
-	transmit_msg[4] = func;								//код функции
+	transmit_msg[4] = 0x03;								//код функции
 	transmit_msg[5] = 2;								//длина пакета
 	transmit_msg[6] = (uint8_t)(ModbusReg[reg] >> 8);	//передаваемый регистр при чтении старший байт
 	transmit_msg[7] = (uint8_t)ModbusReg[reg];			//младший
@@ -406,9 +382,42 @@ void MRTU_Read(uint16_t reg, uint8_t func){
 	transmit_msg[9] = (uint8_t)(tmp >> 8);				//
 
 	HAL_UART_Transmit(&huart2, transmit_msg, 10, 50);
-
-
 }
+void MRTU_Write(uint16_t reg, uint16_t value){
+	static uint8_t transmit_msg[16] = {0};
+	ModbusReg[reg] = value;
+
+	transmit_msg[0] = (uint8_t)(ModbusReg[7] >> 8);		//
+	transmit_msg[1] = (uint8_t)ModbusReg[7];			//адрес LorA хост
+	transmit_msg[2] = (uint8_t)ModbusReg[8];			//канал LoRa
+	transmit_msg[3] = (uint8_t)ModbusReg[0];			//MRTU адрес
+	transmit_msg[4] = 0x06;								//код функции
+	transmit_msg[5] = 2;								//длина пакета
+	transmit_msg[6] = (uint8_t)(ModbusReg[reg] >> 8);	//передаваемый регистр при чтении старший байт
+	transmit_msg[7] = (uint8_t)ModbusReg[reg];			//младший
+	uint16_t tmp = MRTU_CRC(&transmit_msg[3], 5);
+	transmit_msg[8] = (uint8_t)tmp;						//CRC
+	transmit_msg[9] = (uint8_t)(tmp >> 8);				//
+
+	HAL_UART_Transmit(&huart2, transmit_msg, 10, 50);
+}
+void MRTU_Error(uint8_t code, uint8_t func){
+	static uint8_t transmit_msg[16] = {0};
+
+	transmit_msg[0] = (uint8_t)(ModbusReg[7] >> 8);		//
+	transmit_msg[1] = (uint8_t)ModbusReg[7];			//адрес LorA хост
+	transmit_msg[2] = (uint8_t)ModbusReg[8];			//канал LoRa
+	transmit_msg[3] = (uint8_t)ModbusReg[0];			//MRTU адрес
+	transmit_msg[4] = func | 0x80;								//код функции
+	transmit_msg[5] = code;								//длина пакета
+	uint16_t tmp = MRTU_CRC(&transmit_msg[3], 3);
+	transmit_msg[6] = (uint8_t)tmp;						//CRC
+	transmit_msg[7] = (uint8_t)(tmp >> 8);				//
+	HAL_UART_Transmit(&huart2, transmit_msg, 8, 50);
+}
+
+
+
 
 
 
