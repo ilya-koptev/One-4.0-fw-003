@@ -1,0 +1,30 @@
+!SESSION 2024-02-25 18:54:58.878 -----------------------------------------------
+eclipse.buildId=Version 1.14.0
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ru_RU
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-02-25 19:00:00.261
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-02-25 19:00:00.264
+!MESSAGE Log4j2 initialized with config file D:\Git\Parametrica\One-4.0\fw-003\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-02-25 19:00:06.995
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2024-02-25 19:13:31.277 -----------------------------------------------
+eclipse.buildId=Version 1.14.0
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ru_RU
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data file:/D:/Git/Parametrica/One-4.0/fw-003/
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-02-25 19:13:39.567
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-02-25 19:13:39.569
+!MESSAGE Log4j2 initialized with config file D:\Git\Parametrica\One-4.0\fw-003\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-02-25 19:13:45.170
+!MESSAGE Started RMI Server, listening on port 41337
