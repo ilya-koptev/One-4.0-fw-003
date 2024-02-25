@@ -5,6 +5,7 @@
 #include "debug_LED.h"
 
 void Set_Out(PowerChannelTypeDef Channel, uint16_t volume){
+if (volume > 1000) {volume = 1000;}
 	if (Channel == P_OUT_1){TIM4->CCR1 = volume;}
 	if (Channel == P_OUT_2){TIM4->CCR2 = volume;}
 	if (Channel == P_OUT_3){TIM4->CCR3 = volume;}
