@@ -73,14 +73,14 @@
 				0x0000,	// 4 -
 				0x0000,	// 5 -
 				0x0000,	// 6 -
-				0x0003,	// 7 - LoRa адрес
-				0x0003, // 8 - LoRa канал
-				0x00E7, // 9 - LoRa настройка передачи
-				0x000a, // 10 - основной двигатель шим
-				0x0000, // 11 - правый носовой
-				0x0000, // 12 - левый носовой
-				0x0000, // 13 -
-				0x0000, // 14 -
+				0x0303,	// 7 - LoRa
+				0x6200, // 8 - LoRa
+				0x0303, // 9 - LoRa
+				0x0000, // 10 - кормовой правый
+				0x0000, // 11 - кормовой левый
+				0x0000, // 12 - носовой правый
+				0x0000, // 13 - носовой левый
+				0x0000, // 14 - полный стоп
 				0x0000, // 15 -
 				0x0000, // 16 -
 				0x0000, // 17 -
@@ -217,9 +217,19 @@ int main(void)
 	  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	  GPIO_InitStruct.Pull = GPIO_NOPULL;
 	  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-	#define LORA_SET HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
-	#define LORA_WORK HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
+#define LORA_SET HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+#define LORA_WORK HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET);
 
+		LORA_SET
+		HAL_Delay(1000);
+		uint8_t prog_string[9] = {0xc0, 0x00, 0x06, 0x03, 0x03, 0x62, 0x00, 0x03, 0x03};
+		HAL_UART_Transmit(&huart2, prog_string, 9, 50);
+		HAL_Delay(1000);
+		LORA_WORK
+
+
+
+	  LORA_WORK
 
 #endif
   	init_OK = 1;
@@ -354,9 +364,19 @@ void Main_IncTic(void){
 }
 
 void Update_reg(void){
-	Set_Out(P_OUT_3, ModbusReg[10]);
-	Set_Out(P_OUT_4, ModbusReg[11]);
-	Set_Out(P_OUT_5, ModbusReg[12]);
+	if (ModbusReg[14]) {
+		ModbusReg[14] = 0;
+		ModbusReg[13] = 0;
+		ModbusReg[12] = 0;
+		ModbusReg[11] = 0;
+		ModbusReg[10] = 0;
+	}
+	Set_Out(P_OUT_2, ModbusReg[10]);
+	Set_Out(P_OUT_3, ModbusReg[11]);
+	Set_Out(P_OUT_4, ModbusReg[12]);
+	Set_Out(P_OUT_5, ModbusReg[13]);
+
+
 }
 
 
@@ -375,12 +395,7 @@ void Buttons_Handler (uint8_t Butt, Button_events_TypeDef Event){
 	}
 	if ((Butt == 0) && (Event == LONG_CLC)) {
 
-		LORA_SET
-		HAL_Delay(1000);
-		uint8_t prog_string[6] = {0x03, 0x03, 0x62, 0x00, 0x03, 0x03};
-		HAL_UART_Transmit(&huart2, prog_string, 6, 500);
-		HAL_Delay(1000);
-		LORA_WORK
+
 	}
 
 }
