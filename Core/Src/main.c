@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "crc.h"
 #include "dma.h"
 #include "fatfs.h"
@@ -205,6 +206,7 @@ int main(void)
   MX_RNG_Init();
   MX_SDIO_SD_Init();
   MX_CRC_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
   	MM_Init();
@@ -360,6 +362,8 @@ void Main_IncTic(void){
 	else {
 		Update_reg();
 		timer_5_sec = 5000;
+		ModbusReg[20] = HAL_ADC_GetValue(&hadc1);
+		HAL_ADC_Start(&hadc1);
 	}
 }
 
@@ -459,10 +463,6 @@ void MRTU_Error(uint8_t code, uint8_t func){
 	transmit_msg[4] = (uint8_t)(tmp >> 8);				//
 	HAL_UART_Transmit(&huart2, transmit_msg, 5, 50);
 }
-
-
-
-
 
 
 
