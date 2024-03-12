@@ -2,10 +2,10 @@
 ../Core/Src/main.c:273:6:SystemClock_Config	4
 ../Core/Src/main.c:320:6:HAL_UART_RxCpltCallback	15
 ../Core/Src/main.c:359:6:Main_IncTic	2
-../Core/Src/main.c:370:6:Update_reg	2
-../Core/Src/main.c:388:6:Buttons_Handler	3
-../Core/Src/main.c:406:10:MRTU_CRC	2
-../Core/Src/main.c:417:6:MRTU_Read	1
-../Core/Src/main.c:434:6:MRTU_Write	1
-../Core/Src/main.c:452:6:MRTU_Error	1
-../Core/Src/main.c:475:6:Error_Handler	1
+../Core/Src/main.c:368:6:Update_reg	2
+../Core/Src/main.c:388:6:Buttons_Handler	1
+../Core/Src/main.c:403:10:MRTU_CRC	2
+../Core/Src/main.c:414:6:MRTU_Read	1
+../Core/Src/main.c:431:6:MRTU_Write	1
+../Core/Src/main.c:449:6:MRTU_Error	1
+../Core/Src/main.c:472:6:Error_Handler	1

@@ -1,13 +1,18 @@
 #MicroXplorer Configuration settings - do not modify
 ADC1.Channel-4\#ChannelRegularConversion=ADC_CHANNEL_VBAT
-ADC1.ContinuousConvMode=ENABLE
+ADC1.ClockPrescaler=ADC_CLOCK_SYNC_PCLK_DIV2
+ADC1.ContinuousConvMode=DISABLE
+ADC1.DataAlign=ADC_DATAALIGN_RIGHT
 ADC1.EOCSelection=ADC_EOC_SINGLE_CONV
-ADC1.IPParameters=Rank-4\#ChannelRegularConversion,master,Channel-4\#ChannelRegularConversion,SamplingTime-4\#ChannelRegularConversion,NbrOfConversionFlag,Resolution,ContinuousConvMode,EOCSelection,NbrOfConversion
+ADC1.EnableAnalogWatchDog=false
+ADC1.IPParameters=Rank-4\#ChannelRegularConversion,master,Channel-4\#ChannelRegularConversion,SamplingTime-4\#ChannelRegularConversion,NbrOfConversionFlag,Resolution,ContinuousConvMode,EOCSelection,NbrOfConversion,ScanConvMode,ClockPrescaler,DataAlign,InjNumberOfConversion,EnableAnalogWatchDog
+ADC1.InjNumberOfConversion=0
 ADC1.NbrOfConversion=1
 ADC1.NbrOfConversionFlag=1
 ADC1.Rank-4\#ChannelRegularConversion=1
-ADC1.Resolution=ADC_RESOLUTION_8B
-ADC1.SamplingTime-4\#ChannelRegularConversion=ADC_SAMPLETIME_480CYCLES
+ADC1.Resolution=ADC_RESOLUTION_12B
+ADC1.SamplingTime-4\#ChannelRegularConversion=ADC_SAMPLETIME_56CYCLES
+ADC1.ScanConvMode=DISABLE
 ADC1.master=1
 CAD.formats=
 CAD.pinconfig=Pin name

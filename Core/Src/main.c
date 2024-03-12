@@ -362,8 +362,6 @@ void Main_IncTic(void){
 	else {
 		Update_reg();
 		timer_5_sec = 5000;
-		ModbusReg[20] = HAL_ADC_GetValue(&hadc1);
-		HAL_ADC_Start(&hadc1);
 	}
 }
 
@@ -379,7 +377,9 @@ void Update_reg(void){
 	Set_Out(P_OUT_3, ModbusReg[11]);
 	Set_Out(P_OUT_4, ModbusReg[12]);
 	Set_Out(P_OUT_5, ModbusReg[13]);
-
+	uint16_t tmp = HAL_ADC_GetValue(&hadc1);
+	ModbusReg[20] = (tmp * 5) + (tmp >> 3);
+	HAL_ADC_Start(&hadc1);
 
 }
 
@@ -389,9 +389,6 @@ void Buttons_Handler (uint8_t Butt, Button_events_TypeDef Event){
 
 
 	if ((Butt == 0) && (Event == SHORT_CLC)) {
-
-		uint8_t prog_string[6] = {0x03, 0x03, 0x62, 0x00, 0x03, 0x03};
-		HAL_UART_Transmit(&huart2, prog_string, 6, 50);
 
 	}
 	if ((Butt == 0) && (Event == DOUBLE_CLC)) {
